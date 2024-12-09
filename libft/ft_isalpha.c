@@ -1,24 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execve.c                                           :+:      :+:    :+:   */
+/*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/06 21:42:29 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/07 17:55:18 by bizcru           ###   ########.fr       */
+/*   Created: 2024/06/26 23:08:08 by bizcru            #+#    #+#             */
+/*   Updated: 2024/10/18 16:12:28 by bizcru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include "libft.h"
 
-int main()
+int	ft_isalpha(int c)
 {
-	char *path = "/bin/ls";
-	char *args[] = {"ls", NULL};
-	char *envp[] = {NULL};
-
-	execve(path, args, envp);
+	if (ft_isupper(c) || ft_islower(c))
+		return (1024);
+	return (0);
 }

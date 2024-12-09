@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execve.c                                           :+:      :+:    :+:   */
+/*   ft_lstiter.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/06 21:42:29 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/07 17:55:18 by bizcru           ###   ########.fr       */
+/*   Created: 2024/07/08 04:05:01 by bizcru            #+#    #+#             */
+/*   Updated: 2024/11/21 20:13:03 by bizcru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include "libft.h"
 
-int main()
+void	ft_lstiter(t_node *lst, void f(int))
 {
-	char *path = "/bin/ls";
-	char *args[] = {"ls", NULL};
-	char *envp[] = {NULL};
-
-	execve(path, args, envp);
+	if (!lst || !f)
+		return ;
+	while (lst)
+	{
+		f(lst->data);
+		lst = lst->next;
+	}
 }

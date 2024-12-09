@@ -1,24 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execve.c                                           :+:      :+:    :+:   */
+/*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/06 21:42:29 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/07 17:55:18 by bizcru           ###   ########.fr       */
+/*   Created: 2024/07/05 16:05:52 by bizcru            #+#    #+#             */
+/*   Updated: 2024/10/18 16:34:34 by bizcru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include "libft.h"
 
-int main()
+char	*ft_strtrim(char const *s1, char const *set)
 {
-	char *path = "/bin/ls";
-	char *args[] = {"ls", NULL};
-	char *envp[] = {NULL};
+	unsigned int	start;
+	unsigned int	end;
 
-	execve(path, args, envp);
+	if (!s1 || !set)
+		return ((char *)s1);
+	start = 0;
+	if (ft_strlen(s1) == 0)
+		end = 0;
+	else
+		end = ft_strlen(s1) - 1;
+	while (ft_strchr(set, s1[start]) && s1[start] != 0)
+		start++;
+	while (ft_strchr(set, s1[end]) && end > start)
+		end--;
+	return (ft_strndup(&s1[start], end - start + 1));
 }

@@ -1,24 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execve.c                                           :+:      :+:    :+:   */
+/*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/06 21:42:29 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/07 17:55:18 by bizcru           ###   ########.fr       */
+/*   Created: 2024/07/01 20:47:43 by bizcru            #+#    #+#             */
+/*   Updated: 2024/10/18 16:34:30 by bizcru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include "libft.h"
 
-int main()
+char	*ft_strrchr(const char *s, int c)
 {
-	char *path = "/bin/ls";
-	char *args[] = {"ls", NULL};
-	char *envp[] = {NULL};
+	unsigned char	*p;
+	unsigned char	*s2;
+	unsigned char	c2;
 
-	execve(path, args, envp);
+	s2 = (unsigned char *)s;
+	p = (unsigned char *)s;
+	c2 = (unsigned char)c;
+	while (*s2)
+		s2++;
+	while (s2 >= p)
+	{
+		if (*s2 == c2)
+			return ((char *)(s2));
+		s2--;
+	}
+	return (NULL);
 }

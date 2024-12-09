@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execve.c                                           :+:      :+:    :+:   */
+/*   ft_lstsize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/06 21:42:29 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/07 17:55:18 by bizcru           ###   ########.fr       */
+/*   Created: 2024/07/08 02:44:38 by bizcru            #+#    #+#             */
+/*   Updated: 2024/11/21 16:32:35 by bizcru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include "libft.h"
 
-int main()
+int	ft_lstsize(t_node *lst)
 {
-	char *path = "/bin/ls";
-	char *args[] = {"ls", NULL};
-	char *envp[] = {NULL};
+	int	i;
 
-	execve(path, args, envp);
+	i = 0;
+	while (lst)
+	{
+		i++;
+		lst = lst->next;
+	}
+	return (i);
 }

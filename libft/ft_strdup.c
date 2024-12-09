@@ -1,24 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execve.c                                           :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/06 21:42:29 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/07 17:55:18 by bizcru           ###   ########.fr       */
+/*   Created: 2024/06/28 14:38:42 by bizcru            #+#    #+#             */
+/*   Updated: 2024/10/18 16:33:24 by bizcru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include "libft.h"
 
-int main()
+char	*ft_strdup(const char *s)
 {
-	char *path = "/bin/ls";
-	char *args[] = {"ls", NULL};
-	char *envp[] = {NULL};
+	char	*rtrn;
+	char	*i;
 
-	execve(path, args, envp);
+	rtrn = malloc(ft_strlen(s) + 1);
+	if (rtrn == NULL)
+		return (NULL);
+	i = rtrn;
+	while (*s)
+	{
+		*i = *s;
+		i++;
+		s++;
+	}
+	*i = 0;
+	return (rtrn);
 }
