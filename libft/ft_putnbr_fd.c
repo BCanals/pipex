@@ -1,24 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execve.c                                           :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/06 21:42:29 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/07 17:55:18 by bizcru           ###   ########.fr       */
+/*   Created: 2024/07/06 03:34:37 by bizcru            #+#    #+#             */
+/*   Updated: 2024/10/18 16:32:54 by bizcru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include "libft.h"
 
-int main()
+static void	my_putnbr(unsigned int n, int fd)
 {
-	char *path = "/bin/ls";
-	char *args[] = {"ls", NULL};
-	char *envp[] = {NULL};
+	char	nbr;
 
-	execve(path, args, envp);
+	if (n > 9)
+		my_putnbr(n / 10, fd);
+	nbr = n % 10 + 48;
+	write(fd, &nbr, 1);
+}
+
+void	ft_putnbr_fd(int n, int fd)
+{
+	if (fd < 0)
+		return ;
+	if (n < 0)
+	{
+		write(fd, "-", 1);
+		my_putnbr((unsigned int) ~(n - 1), fd);
+	}
+	else
+		my_putnbr((unsigned int)n, fd);
 }

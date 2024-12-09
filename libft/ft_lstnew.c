@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execve.c                                           :+:      :+:    :+:   */
+/*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/06 21:42:29 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/07 17:55:18 by bizcru           ###   ########.fr       */
+/*   Created: 2024/07/08 01:40:43 by bizcru            #+#    #+#             */
+/*   Updated: 2024/11/29 15:48:14 by bizcru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include "libft.h"
 
-int main()
+t_node	*ft_lstnew(int *data)
 {
-	char *path = "/bin/ls";
-	char *args[] = {"ls", NULL};
-	char *envp[] = {NULL};
+	t_node	*rtrn;
 
-	execve(path, args, envp);
+	rtrn = malloc(sizeof(t_node));
+	if (!rtrn)
+		return (NULL);
+	rtrn->data = *data;
+	rtrn->next = NULL;
+	rtrn->prev = NULL;
+	rtrn->r_len = -1;
+	rtrn->rr_len = -1;
+	return (rtrn);
 }
