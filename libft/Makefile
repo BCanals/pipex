@@ -6,7 +6,7 @@
 #    By: bizcru <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/28 15:47:58 by bizcru            #+#    #+#              #
-#    Updated: 2024/12/04 17:25:12 by bizcru           ###   ########.fr        #
+#    Updated: 2024/12/10 14:44:23 by bcanals-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ SRCS = ft_islower.c ft_isupper.c ft_isalpha.c ft_isdigit.c ft_isalnum.c \
 		ft_lstnew.c ft_lstadd_front.c ft_lstadd_back.c ft_lstsize.c \
 		ft_lstlast.c ft_lstlast_prev.c ft_lstdelone.c ft_lstclear.c \
 		ft_lstiter.c ft_lstiter_back.c ft_lstmap.c ft_printf.c \
-		ft_printf_utils.c get_next_line.c
+		ft_printf_utils.c get_next_line.c ft_strjoins.c ft_free_array.c
 
 OBJS = $(SRCS:.c=.o)
 MAKEFLAGS += --no-print-directory

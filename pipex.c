@@ -6,7 +6,7 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 11:15:12 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/09 11:34:52 by bizcru           ###   ########.fr       */
+/*   Updated: 2024/12/10 14:56:44 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,31 @@ char	*get_path(char *cmd, char **env)
 {
 	int		i;
 	char	**paths;
-	
-	i = 0;
-	while (env[i] && ft_strncmp(env[i], "PATH=", 5) != 0)
-		i++;
-	if (!env[i])
-		return ('\0');
-	paths = ft_split(env[i] + 5, ':');
-	if (!paths)
-		return ('\0');
+	char	*this_path;
+
+	i = -1;
+	while (env[++i] && ft_strncmp(env[i], "PATH=", 5) != 0)
+		;
+	if (env[i])
+		paths = ft_split(env[i] + 5, ':');
+	if (!env[i] || !paths)
+		return (NULL);
 	i = -1;
 	while (paths[++i])
+	{
+		this_path = ft_strjoins(paths[i], "/", cmd);
+		if (access(this_path, X_OK) == 0)
+		{
+			ft_free_array(paths);
+			return (this_path);
+		}
+		free(this_path);
+	}
+	ft_free_array(paths);
+	return (NULL);
 }
 
-void sender(char *arg, int *pipefd, char **env)
+void	sender(char *arg, int *pipefd, char **env)
 {
 	close(pipefd[0]);
 	dup2(pipefd[1], STDOUT_FILENO);
