@@ -6,7 +6,7 @@
 #    By: bizcru <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/18 17:30:42 by bizcru            #+#    #+#              #
-#    Updated: 2024/12/07 16:20:45 by bizcru           ###   ########.fr        #
+#    Updated: 2024/12/11 13:46:28 by bcanals-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ LIBFT = $(LIBFT_DIR)/libft.a
 INCLUDE = src/push_swap.h
 BNS_INCLUDE = bonus/push_swap_bonus.h
 CFLAGS = -Wall -Wextra -Werror
+CC = cc
 
 END = \033[m
 RED = \033[31m
@@ -43,13 +44,13 @@ all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)
 	@echo -n "\n$(YELLOW) ---> BUILDING $(NAME)...$(END)"
-	@gcc $(CFLAGS) $(OBJS) -L$(LIBFT_DIR) -lft -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_DIR) -lft -o $(NAME)
 	@echo "$(GREEN) DONE!$(END)"
 	@echo "$(GREEN)   === BUILDING COMPLETE : ) ===$(END)\n"
 
 bonus: $(BNS_OBJS) $(LIBFT)
 	@echo -n "\n$(YELLOW) ---> BUILDING $(BNS_NAME)...$(END)"
-	@gcc $(CFLAGS) $(BNS_OBJS) -L$(LIBFT_DIR) -lft -o $(BNS_NAME)
+	@$(CC) $(CFLAGS) $(BNS_OBJS) -L$(LIBFT_DIR) -lft -o $(BNS_NAME)
 	@echo "$(GREEN) DONE!$(END)"
 	@echo "$(GREEN)   === BUILDING COMPLETE : ) ===$(END)\n"
 	
@@ -59,8 +60,8 @@ $(LIBFT):
 	@make -C $(LIBFT_DIR)
 	@echo "$(GREEN)   === libft.a is compiled :) ===$(END)"
 
-%.o: %.c $(INCLUDE)
-	@gcc $(CFLAGS) -I. -c $< -o $@
+%.o: %.c $(INCLUDE) Makefile
+	@$(CC) $(CFLAGS) -I. -c $< -o $@
 	@echo -n "\n $(BLUE) ---> Building objects... --- $(END)"
 	@echo " $(CIAN) DONE! :) $(END)"
 

@@ -6,13 +6,14 @@
 #    By: bizcru <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/28 15:47:58 by bizcru            #+#    #+#              #
-#    Updated: 2024/12/10 14:44:23 by bcanals-         ###   ########.fr        #
+#    Updated: 2024/12/11 13:48:01 by bcanals-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 
 CFLAGS = -Wall -Wextra -Werror -D BUFFER_SIZE=20
+CC = cc
 
 SRCS = ft_islower.c ft_isupper.c ft_isalpha.c ft_isdigit.c ft_isalnum.c \
 		ft_isascii.c ft_isprint.c ft_strlen.c ft_toupper.c ft_tolower.c \
@@ -27,7 +28,8 @@ SRCS = ft_islower.c ft_isupper.c ft_isalpha.c ft_isdigit.c ft_isalnum.c \
 		ft_lstnew.c ft_lstadd_front.c ft_lstadd_back.c ft_lstsize.c \
 		ft_lstlast.c ft_lstlast_prev.c ft_lstdelone.c ft_lstclear.c \
 		ft_lstiter.c ft_lstiter_back.c ft_lstmap.c ft_printf.c \
-		ft_printf_utils.c get_next_line.c ft_strjoins.c ft_free_array.c
+		ft_printf_utils.c get_next_line.c ft_strjoins.c ft_free_array.c \
+		ft_strstr.c
 
 OBJS = $(SRCS:.c=.o)
 MAKEFLAGS += --no-print-directory
@@ -48,7 +50,7 @@ $(NAME): $(OBJS) libft.h Makefile
 	@echo "$(GREEN) DONE! $(END)"
 
 %.o: %.c
-	@gcc $(CFLAGS) -I. -c $< -o $@
+	@$(CC) $(CFLAGS) -I. -c $< -o $@
 
 clean: 
 	@rm -f $(OBJS)
