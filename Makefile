@@ -6,7 +6,7 @@
 #    By: bizcru <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/18 17:30:42 by bizcru            #+#    #+#              #
-#    Updated: 2024/12/11 13:46:28 by bcanals-         ###   ########.fr        #
+#    Updated: 2024/12/12 00:22:49 by bizcru           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ LIBFT = $(LIBFT_DIR)/libft.a
 
 INCLUDE = src/push_swap.h
 BNS_INCLUDE = bonus/push_swap_bonus.h
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 CC = cc
 
 END = \033[m

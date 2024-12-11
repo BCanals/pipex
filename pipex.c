@@ -6,7 +6,7 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 11:15:12 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/11 23:46:37 by bizcru           ###   ########.fr       */
+/*   Updated: 2024/12/12 00:25:18 by bizcru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,26 +59,29 @@ void	sender(char *arg, int *pipefd, char **env)
 	exit(EXIT_SUCCESS);
 }
 
-void receiver(char *arg, int *pipefd, char **env)
+void	receiver(char *arg, int *pipefd, char **env)
 {
-	char *buffer;
-	int buf_size = 100;
+	char	*path;
+	char	**args;
 
+	args = ft_split(arg, ' ');
+	if (!args)
+		exit(EXIT_FAILURE);
+	path = get_path(args[0], env);
+	if (!path)
+		exit(EXIT_FAILURE);
 	close(pipefd[1]);
-	buffer = ft_calloc(buf_size, 1);
-	read(pipefd[0], buffer, buf_size);
-	buffer[buf_size - 1] = '\0';
-	char **p = ft_split(buffer, '\n');
-	execve(arg, p, env); 
-	free(buffer);
-	free(p);
+	dup2(pipefd[0], STDIN_FILENO);
+	execve(path, args, env); 
+	free(path);
+	free(args);
 	wait(NULL);
 }
 
-int main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
-	int *pipefd;
-	pid_t pid;
+	int		*pipefd;
+	pid_t	pid;
 
 	pipefd = ft_calloc(2, sizeof(int));
 	argc++;
