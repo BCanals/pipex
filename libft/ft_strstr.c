@@ -6,7 +6,7 @@
 /*   By: bcanals- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 16:43:53 by bcanals-          #+#    #+#             */
-/*   Updated: 2024/12/10 16:36:36 by bcanals-         ###   ########.fr       */
+/*   Updated: 2024/12/11 13:40:12 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,17 @@
 char	*ft_strstr(const char *big, const char *little)
 {
 	size_t	i;
-	size_t len;
+	size_t	len;
+	size_t	lit_len;
 
 	i = 0;
 	if (little[0] == 0)
 		return ((char *)(big));
-	len = ft_strlen(big) - ft_strlen(little);
+	lit_len = ft_strlen(little);
+	len = ft_strlen(big) - lit_len;
 	while (i <= len)
 	{
-		if (ft_strcmp(big, little) == 0)
+		if (ft_strncmp(big, little, lit_len) == 0)
 			return ((char *)(big));
 		big++;
 		i++;

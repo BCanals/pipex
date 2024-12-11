@@ -6,7 +6,7 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 11:15:12 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/10 14:56:44 by bcanals-         ###   ########.fr       */
+/*   Updated: 2024/12/11 23:46:37 by bizcru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,20 @@ char	*get_path(char *cmd, char **env)
 
 void	sender(char *arg, int *pipefd, char **env)
 {
+	char *path;
+	char **args;
+	
+	args = ft_split(arg, ' ');
+	if (!args)
+		exit(EXIT_FAILURE);
+	path = get_path(args[0], env);
+	if (!path)
+		exit(EXIT_FAILURE);
 	close(pipefd[0]);
 	dup2(pipefd[1], STDOUT_FILENO);
-	char *p[] = {NULL};
-	execve(arg, p, env);
+	execve(path, args, env);
+	free(path);
+	ft_free_array(args);
 	exit(EXIT_SUCCESS);
 }
 

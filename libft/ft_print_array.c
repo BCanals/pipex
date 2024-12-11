@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_array.c                                    :+:      :+:    :+:   */
+/*   ft_print_array.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bcanals- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/10 14:42:25 by bcanals-          #+#    #+#             */
-/*   Updated: 2024/12/11 18:36:42 by bcanals-         ###   ########.fr       */
+/*   Created: 2024/12/11 18:52:01 by bcanals-          #+#    #+#             */
+/*   Updated: 2024/12/11 18:57:07 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_free_array(char **s)
+void	ft_print_array(char **array)
 {
-	unsigned int	i;
-
-	i = 0;
-	while (s[i])
-		free(s[i++]);
-	free(s);
+	if (!array)
+		return ;
+	while (*array)
+	{
+		ft_putstr_fd(*array++, 1);
+		ft_putchar_fd('\n', 1);
+	}
 }

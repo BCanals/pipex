@@ -1,23 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_array.c                                    :+:      :+:    :+:   */
+/*   ft_print_lst.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bcanals- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/10 14:42:25 by bcanals-          #+#    #+#             */
-/*   Updated: 2024/12/11 18:36:42 by bcanals-         ###   ########.fr       */
+/*   Created: 2024/12/11 18:46:12 by bcanals-          #+#    #+#             */
+/*   Updated: 2024/12/11 18:49:29 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <libft.h>
 
-void	ft_free_array(char **s)
+void	ft_print_lst(int data)
 {
-	unsigned int	i;
-
-	i = 0;
-	while (s[i])
-		free(s[i++]);
-	free(s);
+	ft_printf("%i\n", data);
 }

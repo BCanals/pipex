@@ -6,7 +6,7 @@
 /*   By: bcanals- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:49:18 by bcanals-          #+#    #+#             */
-/*   Updated: 2024/12/04 17:44:23 by bizcru           ###   ########.fr       */
+/*   Updated: 2024/12/11 13:00:37 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,5 @@ char	*ft_strjoin(char *s1, char *s2)
 	ft_memmove(rtrn, s2, s2_len);
 	rtrn -= s1_len;
 	rtrn[size - 1] = '\0';
-	free(s1);
-	s1 = NULL;
-	free(s2);
-	s2 = NULL;
 	return (rtrn);
 }

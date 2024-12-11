@@ -6,7 +6,7 @@
 /*   By: bcanals- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 16:22:49 by bcanals-          #+#    #+#             */
-/*   Updated: 2024/12/04 18:05:07 by bizcru           ###   ########.fr       */
+/*   Updated: 2024/12/11 16:16:44 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static char	*ft_read(int fd, char *buffer)
 			ft_free(&reading);
 			return (buffer);
 		}
-		buffer = ft_strjoin(buffer, reading);
+		buffer = ft_strjoinf(buffer, reading);
 	}
 	return (buffer);
 }

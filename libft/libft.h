@@ -6,7 +6,7 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 23:37:11 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/10 16:34:40 by bcanals-         ###   ########.fr       */
+/*   Updated: 2024/12/11 23:56:51 by bizcru           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ char	*ft_strnstr(const char *big, const char *little, size_t len);
 char	*ft_strstr(const char *big, const char *little);
 char	*ft_substr(const char *s, unsigned int start, size_t len);
 char	*ft_strjoin(char *s1, char *s2);
+char	*ft_strjoinf(char *s1, char *s2);
 char	*ft_strjoins(char *s1, char *s2, char *s3);
 char	*ft_strtrim(char const *s1, char const *set);
 char	**ft_split(char const *s, char c);
@@ -98,6 +99,8 @@ int		ft_printf_dec(va_list *args);
 int		ft_printf_unsigned(va_list *args);
 int		ft_printf_hex(va_list *args, char type);
 int		ft_printf_ptr(va_list *args);
+void	ft_print_lst(int data);
+void	ft_print_array(char **array);
 char	*get_next_line(int fd);
 void	ft_free_array(char **s);
 
