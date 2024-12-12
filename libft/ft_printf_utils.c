@@ -6,7 +6,7 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 23:12:36 by bizcru            #+#    #+#             */
-/*   Updated: 2024/10/18 15:35:06 by bizcru           ###   ########.fr       */
+/*   Updated: 2024/12/12 17:33:44 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int	ft_printf_hex(va_list *args, char type)
 	int				rtrn;
 	char			*base;
 
+	base = NULL;
 	i = va_arg(*args, unsigned int);
 	if (type == 'x' )
 		base = ft_strdup("0123456789abcdef");

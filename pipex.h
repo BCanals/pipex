@@ -6,7 +6,7 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 16:18:40 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/07 16:21:18 by bizcru           ###   ########.fr       */
+/*   Updated: 2024/12/12 17:25:37 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <sys/wait.h>
+# include <errno.h>
 # include "libft/libft.h"
 #endif
 

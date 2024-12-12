@@ -6,7 +6,7 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 11:15:12 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/12 17:18:40 by bcanals-         ###   ########.fr       */
+/*   Updated: 2024/12/12 17:40:50 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	handle_err(int my_errno, char *msg)
 {
-	errno = my_errno,
+	errno = my_errno;
 	if (my_errno)
 		perror(msg);
 	else
@@ -56,9 +56,9 @@ void	sender(char **argv, int *pipefd, char **env)
 	char	**args;
 	int		file_fd;
 	
-	file_fd = OPEN(argv[1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	file_fd = open(argv[1], O_RDONLY);
 	if (file_fd == -1)
-		handle_err(0, "sender OPEN");
+		handle_err(0, "sender open");
 	args = ft_split(argv[2], ' ');
 	if (!args)
 		exit(EXIT_FAILURE);
@@ -74,19 +74,21 @@ void	sender(char **argv, int *pipefd, char **env)
 	execve(path, args, env);
 	free(path);
 	ft_free_array(args);
+	close(file_fd);
+	close(pipefd[1]);
 	exit(EXIT_SUCCESS);
 }
 
-void	receiver(char **arg, int *pipefd, char **env)
+void	receiver(char **argv, int *pipefd, char **env)
 {
 	char	*path;
 	char	**args;
 	int		file_fd;
 
-	file_fd = OPEN(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	file_fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (file_fd == -1)
-		handle_err(0, "sender OPEN");
-	args = ft_split(arg, ' ');
+		handle_err(0, "sender open");
+	args = ft_split(argv[3], ' ');
 	if (!args)
 		exit(EXIT_FAILURE);
 	path = get_path(args[0], env);
@@ -100,30 +102,34 @@ void	receiver(char **arg, int *pipefd, char **env)
 	dup2(file_fd, STDOUT_FILENO);
 	execve(path, args, env); 
 	free(path);
-	free(args);
+	ft_free_array(args);
+	close(file_fd);
+	close(pipefd[0]);
 	wait(NULL);
 }
 
 int	main(int argc, char **argv, char **env)
 {
-	int		*pipefd;
+	int		pipefd[2];
 	pid_t	pid_1;
-	pid_t	pid_2
+	pid_t	pid_2;
 
 	if (argc != 5)
-		handle_error(0, "Please write 4 arguments")
+		handle_err(0, "Please write 4 arguments");
 	if (pipe(pipefd) == -1)
-		handle_error(errno, "pipe error");
+		handle_err(errno, "pipe error");
 	pid_1 = fork();
 	if (pid_1 == -1)
 		handle_err(errno, "pid_1");
 	if (pid_1 == 0)
 		sender(argv, pipefd, env);
 	pid_2 = fork();
-	if (pid_2 == -1);
+	if (pid_2 == -1)
 		handle_err(errno, "pid_2");
 	else
 		receiver(argv, pipefd, env);
+	close(pipefd[0]);
+	close(pipefd[1]);
 	waitpid(pid_1, NULL, 0);
 	waitpid(pid_2, NULL, 0);
 }
