@@ -6,11 +6,21 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 11:15:12 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/12 00:25:18 by bizcru           ###   ########.fr       */
+/*   Updated: 2024/12/12 17:18:40 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	handle_err(int my_errno, char *msg)
+{
+	errno = my_errno,
+	if (my_errno)
+		perror(msg);
+	else
+		ft_putstr_fd(msg, 2);
+	exit(EXIT_FAILURE);
+}
 
 char	*get_path(char *cmd, char **env)
 {
@@ -40,38 +50,54 @@ char	*get_path(char *cmd, char **env)
 	return (NULL);
 }
 
-void	sender(char *arg, int *pipefd, char **env)
+void	sender(char **argv, int *pipefd, char **env)
 {
-	char *path;
-	char **args;
+	char	*path;
+	char	**args;
+	int		file_fd;
 	
-	args = ft_split(arg, ' ');
+	file_fd = OPEN(argv[1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (file_fd == -1)
+		handle_err(0, "sender OPEN");
+	args = ft_split(argv[2], ' ');
 	if (!args)
 		exit(EXIT_FAILURE);
 	path = get_path(args[0], env);
 	if (!path)
+	{
+		ft_free_array(args);
 		exit(EXIT_FAILURE);
+	}
 	close(pipefd[0]);
 	dup2(pipefd[1], STDOUT_FILENO);
+	dup2(file_fd, STDIN_FILENO);
 	execve(path, args, env);
 	free(path);
 	ft_free_array(args);
 	exit(EXIT_SUCCESS);
 }
 
-void	receiver(char *arg, int *pipefd, char **env)
+void	receiver(char **arg, int *pipefd, char **env)
 {
 	char	*path;
 	char	**args;
+	int		file_fd;
 
+	file_fd = OPEN(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (file_fd == -1)
+		handle_err(0, "sender OPEN");
 	args = ft_split(arg, ' ');
 	if (!args)
 		exit(EXIT_FAILURE);
 	path = get_path(args[0], env);
 	if (!path)
+	{
+		ft_free_array(args);
 		exit(EXIT_FAILURE);
+	}
 	close(pipefd[1]);
 	dup2(pipefd[0], STDIN_FILENO);
+	dup2(file_fd, STDOUT_FILENO);
 	execve(path, args, env); 
 	free(path);
 	free(args);
@@ -81,26 +107,23 @@ void	receiver(char *arg, int *pipefd, char **env)
 int	main(int argc, char **argv, char **env)
 {
 	int		*pipefd;
-	pid_t	pid;
+	pid_t	pid_1;
+	pid_t	pid_2
 
-	pipefd = ft_calloc(2, sizeof(int));
-	argc++;
+	if (argc != 5)
+		handle_error(0, "Please write 4 arguments")
 	if (pipe(pipefd) == -1)
-	{
-		perror("pipe");
-		exit(EXIT_FAILURE);
-	}
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
-	if (pid == 0)
-		sender(argv[1], pipefd, env);
+		handle_error(errno, "pipe error");
+	pid_1 = fork();
+	if (pid_1 == -1)
+		handle_err(errno, "pid_1");
+	if (pid_1 == 0)
+		sender(argv, pipefd, env);
+	pid_2 = fork();
+	if (pid_2 == -1);
+		handle_err(errno, "pid_2");
 	else
-		receiver(argv[2], pipefd, env);
-	free(pipefd);
-	return 0;
+		receiver(argv, pipefd, env);
+	waitpid(pid_1, NULL, 0);
+	waitpid(pid_2, NULL, 0);
 }
-
