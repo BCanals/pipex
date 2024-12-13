@@ -6,17 +6,14 @@
 #    By: bizcru <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/18 17:30:42 by bizcru            #+#    #+#              #
-#    Updated: 2024/12/12 00:22:49 by bizcru           ###   ########.fr        #
+#    Updated: 2024/12/13 11:58:46 by bcanals-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
 BNS_NAME = pipex
 
-SRCS = pipex.c
-#main.c utils_list_1.c utils_list_2.c utils_param.c utils_rotate.c \
-			 utils_r_rotate.c utils_swap.c utils_sort_1.c utils_sort_2.c
-#SRCS = $(addprefix src/, $(SRCS_NAMES))
+SRCS = pipex.c pipex_utils.c
 OBJS = $(SRCS:.c=.o)
 BNS_SRCS_NAMES = main_bonus.c utils_misc_bonus.c utils_param_bonus.c \
 				 utils_ops_bonus.c utils_sort_bonus.c
