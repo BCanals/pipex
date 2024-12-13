@@ -5,77 +5,62 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bcanals- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/13 11:32:22 by bcanals-          #+#    #+#             */
-/*   Updated: 2024/12/13 16:23:31 by bcanals-         ###   ########.fr       */
+/*   Created: 2024/12/13 12:48:52 by bcanals-          #+#    #+#             */
+/*   Updated: 2024/12/13 18:04:16 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-// Helper function for get_path to manage the error handling.
+// quick line to close 2 fds and print the errors if there are any
 
-static char	*set_error(int *my_errno, char *msg, char **msg_add)
+void	my_close(int fd1, int fd2)
 {
-	*my_errno = errno;
-	*msg_add = msg;
-	return (NULL);
+	if (close(fd1) == -1)
+		perror("close");
+	if (close(fd2) == -1)
+		perror("close");
 }
 
-// Gets the path (if valid one) of the cmd of the child.
-// Manages errors to allow load_data print the correct error info.
+// Frees the data of a t_data
+// Checks which one is available to avoid double free in load_data
 
-static char	*get_path(char *cmd, char **env, int *my_errno, char **msg_add)
+void	clean(t_data *data)
 {
-	int		i;
-	char	**paths;
-	char	*this_path;
-
-	i = -1;
-	while (env[++i] && ft_strncmp(env[i], "PATH=", 5) != 0)
-		;
-	if (env[i])
-		paths = ft_split(env[i] + 5, ':');
-	if (!env[i] || !paths)
-		return (set_error(my_errno, "ft_split in get_path", msg_add));
-	i = -1;
-	while (paths[++i])
-	{
-		this_path = ft_strjoins(paths[i], "/", cmd);
-		if (access(this_path, X_OK) == 0)
-		{
-			ft_free_array(paths);
-			return (this_path);
-		}
-		free(this_path);
-	}
-	ft_free_array(paths);
-	return (set_error(my_errno, "get_path", msg_add));
+	my_close(data->fd_in, data->fd_out);
+	if (data->path)
+		free(data->path);
+	if (data->args)
+		ft_free_array(data->args);
+	free(data);
 }
 
-// Loads the necessary data for the child process, also handles errors.
+// Frees the data in t_data and exits the code via handl_err
 
-t_data	*load_data(char *cmd, char **env, int fd_in, int fd_out)
+void	clean_exit(t_data *data, int my_errno, char *msg)
 {
-	t_data	*new;
-	int		my_errno;
-	char	*msg;
+	clean(data);
+	handle_err(my_errno, msg);
+}
 
-	new = malloc(sizeof(t_data));
-	if (!new)
-	{
-		perror("malloc");
-		my_close(fd_in, fd_out);
-		exit(EXIT_FAILURE);
-	}
-	new->fd_in = fd_in;
-	new->fd_out = fd_out;
-	new->args = NULL;
-	new->path = NULL;
-	args = ft_split(cmd, ' ');
-	if (!args)
-		clean_exit(new, 0, "ft_split in load data");
-	new->path = get_path(args[0], env, &my_errno, &msg);
-	if (!new->path)
-		clean_exit(new, 0, my_errno, msg);
-	return (new);
-} 
+// Exits the process previously printing the error msg
+
+void	handle_err(int my_errno, char *msg)
+{
+	errno = my_errno;
+	if (my_errno)
+		perror(msg);
+	else
+		ft_putstr_fd(msg, 2);
+	exit(EXIT_FAILURE);
+}
+
+// Manages the dup2 with its error handlings
+
+void	redirect(t_data *data)
+{
+	if (dup2(data->fd_in, STDIN_FILENO) == -1)
+		clean_exit(data, errno, "dup2");
+	if (dup2(data->fd_out, STDOUT_FILENO) == -1)
+		clean_exit(data, errno, "dup2");
+}

@@ -6,7 +6,7 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 17:41:12 by bizcru            #+#    #+#             */
-/*   Updated: 2024/10/18 16:33:04 by bizcru           ###   ########.fr       */
+/*   Updated: 2024/12/13 18:14:19 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static unsigned int	count_splits(char const *s, char c)
 	return (split_num);
 }
 
-void	clean(char **s)
+void	split_clean(char **s)
 {
 	unsigned int	i;
 
@@ -48,7 +48,7 @@ void	clean(char **s)
 	free(s);
 }
 
-static char	**fill(char const *s, char c, char **rtrn)
+static char	**split_fill(char const *s, char c, char **rtrn)
 {
 	unsigned int	i;
 	unsigned int	k;
@@ -66,7 +66,7 @@ static char	**fill(char const *s, char c, char **rtrn)
 		rtrn[k] = ft_substr(s, 0, i);
 		if (!rtrn[k])
 		{
-			clean(rtrn);
+			split_clean(rtrn);
 			return (NULL);
 		}
 		k++;
@@ -87,5 +87,5 @@ char	**ft_split(char const *s, char c)
 	rtrn = ft_calloc((size + 1), sizeof (char *));
 	if (!rtrn)
 		return (NULL);
-	return (fill(s, c, rtrn));
+	return (split_fill(s, c, rtrn));
 }
