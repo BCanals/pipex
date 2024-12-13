@@ -6,7 +6,7 @@
 /*   By: bcanals- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 11:32:22 by bcanals-          #+#    #+#             */
-/*   Updated: 2024/12/13 11:57:30 by bcanals-         ###   ########.fr       */
+/*   Updated: 2024/12/13 14:52:37 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,14 @@ void	handle_err(int my_errno, char *msg)
 	exit(EXIT_FAILURE);
 }
 
-char	*get_path(char *cmd, char **env)
+static char *set_error(int *my_errno, char *msg, char **msg_add)
+{
+	*my_errno = errno;
+	*msg_add = msg;
+	return (NULL);
+}
+
+char	*get_path(char *cmd, char **env, int *my_errno, char **msg_add)
 {
 	int		i;
 	char	**paths;
@@ -34,7 +41,7 @@ char	*get_path(char *cmd, char **env)
 	if (env[i])
 		paths = ft_split(env[i] + 5, ':');
 	if (!env[i] || !paths)
-		return (NULL);
+		return (set_error(my_errno, "ft_split in get_path", msg_add));
 	i = -1;
 	while (paths[++i])
 	{
@@ -47,7 +54,7 @@ char	*get_path(char *cmd, char **env)
 		free(this_path);
 	}
 	ft_free_array(paths);
-	return (NULL);
+	return (set_error(my_errno, "get_path", msg_add));
 }
 
 void	my_execve(char *path, char **args, char **env)

@@ -6,7 +6,7 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 11:15:12 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/13 12:45:51 by bcanals-         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:04:58 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,27 +46,15 @@ void	sender(char **argv, int *pipefd, char **env)
 	exit(EXIT_SUCCESS);
 }
 
-void	receiver(char **argv, int *pipefd, char **env)
+void	receiver(char *cmd, char **env, int *fds_in, char **fds_out)
 {
 	char	*path;
 	char	**args;
 	int		file_fd;
 	
-	close(pipefd[1]);
-	//tot aixo va a load
-	file_fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (file_fd == -1)
-		handle_err(errno, "receiver open");
-	args = ft_split(argv[3], ' ');
-	if (!args)
-		handle_err(errno, "receiver split");
-	path = get_path(args[0], env);
-	if (!path)
-	{
-		ft_free_array(args);
-		handle_err(0, "receiver get_path");
-	}
-	// fins aqui load
+	my_close(fds_in[1], fds_out[0]);
+	load_data(cmd, env, fds_in[0], fds_out[1]);
+
 	dup2(pipefd[0], STDIN_FILENO);
 	dup2(file_fd, STDOUT_FILENO);
 	if (my_execve(path, args, env) == -1);
