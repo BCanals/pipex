@@ -6,7 +6,7 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 16:18:40 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/13 11:38:33 by bcanals-         ###   ########.fr       */
+/*   Updated: 2024/12/13 12:57:22 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@
 # include <sys/wait.h>
 # include <errno.h>
 # include "libft/libft.h"
+
+typedef struct s_data
+{
+	char	*path;
+	int		*fds_in[2];
+	int		*fds_out[2];
+}			t_data;
 
 void	handle_err(int my_errno, char *msg);
 char	*get_path(char *cmd, char **env);

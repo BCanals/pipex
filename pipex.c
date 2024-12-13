@@ -6,7 +6,7 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 11:15:12 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/13 11:57:29 by bcanals-         ###   ########.fr       */
+/*   Updated: 2024/12/13 12:45:51 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ void	receiver(char **argv, int *pipefd, char **env)
 	char	*path;
 	char	**args;
 	int		file_fd;
-
+	
+	close(pipefd[1]);
+	//tot aixo va a load
 	file_fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (file_fd == -1)
 		handle_err(errno, "receiver open");
@@ -64,7 +66,7 @@ void	receiver(char **argv, int *pipefd, char **env)
 		ft_free_array(args);
 		handle_err(0, "receiver get_path");
 	}
-	close(pipefd[1]);
+	// fins aqui load
 	dup2(pipefd[0], STDIN_FILENO);
 	dup2(file_fd, STDOUT_FILENO);
 	if (my_execve(path, args, env) == -1);
@@ -87,12 +89,13 @@ int	main(int argc, char **argv, char **env)
 	if (pid_1 == -1)
 		handle_err(errno, "fork pid_1");
 	if (pid_1 == 0)
-		sender(argv, pipefd, env);
+		do_fork(argv, pipefd, env);
 	pid_2 = fork();
 	if (pid_2 == -1)
 		handle_err(errno, "fork pid_2");
 	if (pid_2 == 0)
-		receiver(argv, pipefd, env);
+		do_fork(argv, pipefd, env);
+	//my_close(a, b);
 	close(pipefd[0]);
 	close(pipefd[1]);
 	waitpid(pid_1, NULL, 0);
