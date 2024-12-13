@@ -6,7 +6,7 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 16:18:40 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/13 15:04:53 by bcanals-         ###   ########.fr       */
+/*   Updated: 2024/12/13 16:18:09 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,10 @@ typedef struct s_data
 	int		fd_out;
 }			t_data;
 
-void	handle_err(int my_errno, char *msg);
-char	*get_path(char *cmd, char **env);
-void	my_execve(char *path, char **args, char **env);
 int		my_close(int fd1, int fd2);
 void	clean(t_data *data);
 void	clean_exit(t_data *data, int my_errno, char *msg);
+void	handle_err(int my_errno, char *msg);
+void	redirect(t_data *data);
 t_data	*load_data(char *cmd, char **env, int fd_in, int fd_out);
 #endif

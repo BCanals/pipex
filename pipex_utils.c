@@ -6,30 +6,25 @@
 /*   By: bcanals- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 11:32:22 by bcanals-          #+#    #+#             */
-/*   Updated: 2024/12/13 14:52:37 by bcanals-         ###   ########.fr       */
+/*   Updated: 2024/12/13 16:23:31 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	handle_err(int my_errno, char *msg)
-{
-	errno = my_errno;
-	if (my_errno)
-		perror(msg);
-	else
-		ft_putstr_fd(msg, 2);
-	exit(EXIT_FAILURE);
-}
+// Helper function for get_path to manage the error handling.
 
-static char *set_error(int *my_errno, char *msg, char **msg_add)
+static char	*set_error(int *my_errno, char *msg, char **msg_add)
 {
 	*my_errno = errno;
 	*msg_add = msg;
 	return (NULL);
 }
 
-char	*get_path(char *cmd, char **env, int *my_errno, char **msg_add)
+// Gets the path (if valid one) of the cmd of the child.
+// Manages errors to allow load_data print the correct error info.
+
+static char	*get_path(char *cmd, char **env, int *my_errno, char **msg_add)
 {
 	int		i;
 	char	**paths;
@@ -57,13 +52,30 @@ char	*get_path(char *cmd, char **env, int *my_errno, char **msg_add)
 	return (set_error(my_errno, "get_path", msg_add));
 }
 
-void	my_execve(char *path, char **args, char **env)
+// Loads the necessary data for the child process, also handles errors.
+
+t_data	*load_data(char *cmd, char **env, int fd_in, int fd_out)
 {
-	int execve_r;
+	t_data	*new;
+	int		my_errno;
+	char	*msg;
 
-	execve_r = execve(path, args, env);
-	free(path);
-	ft_free_array(args);
-}
-
-
+	new = malloc(sizeof(t_data));
+	if (!new)
+	{
+		perror("malloc");
+		my_close(fd_in, fd_out);
+		exit(EXIT_FAILURE);
+	}
+	new->fd_in = fd_in;
+	new->fd_out = fd_out;
+	new->args = NULL;
+	new->path = NULL;
+	args = ft_split(cmd, ' ');
+	if (!args)
+		clean_exit(new, 0, "ft_split in load data");
+	new->path = get_path(args[0], env, &my_errno, &msg);
+	if (!new->path)
+		clean_exit(new, 0, my_errno, msg);
+	return (new);
+} 

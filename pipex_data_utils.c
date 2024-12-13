@@ -6,11 +6,13 @@
 /*   By: bcanals- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:48:52 by bcanals-          #+#    #+#             */
-/*   Updated: 2024/12/13 15:00:44 by bcanals-         ###   ########.fr       */
+/*   Updated: 2024/12/13 16:23:01 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+// quick line to close 2 fds and print the errors if there are any
 
 int	my_close(int fd1, int fd2)
 {
@@ -20,18 +22,20 @@ int	my_close(int fd1, int fd2)
 		perror("close");
 }
 
-// Close and frees the data of a t_data
+// Frees the data of a t_data
 // Checks which one is available to avoid double free in load_data
 
 void	clean(t_data *data)
-{	
+{
 	my_close(data->fd1, data->fd2);
 	if (data->path)
 		free(data->path);
 	if (data->args)
 		ft_free_array(data->args);
-	free(data);	
+	free(data);
 }
+
+// Frees the data in t_data and exits the code via handl_err
 
 void	clean_exit(t_data *data, int my_errno, char *msg)
 {
@@ -39,32 +43,24 @@ void	clean_exit(t_data *data, int my_errno, char *msg)
 	handl_err(my_errno, msg);
 }
 
-// Creates a new t_data struct provided the cmd is a valid one.
+// Exits the process previously printing the error msg
 
-t_data	*load_data(char *cmd, char **env, int fd_in, int fd_out)
+void	handle_err(int my_errno, char *msg)
 {
-	t_data	*new;
-	int		my_errno;
-	char	*msg;
-
-	new = malloc(sizeof(t_data));
-	if (!new)
-	{
-		perror("malloc");
-		my_close(fd_in, fd_out);
-		exit(EXIT_FAILURE);
-	}
-	new->fd_in = fd_in;
-	new->fd_out = fd_out;
-	new->args = NULL;
-	new->path = NULL;
-	args = ft_split(cmd, ' ');
-	if (!args)
-		clean_exit(new, 0, "ft_split in load data");
-	new->path = get_path(args[0], env, &my_errno, &msg);
-	if (!new->path)
-		clean_exit(new, 0, my_errno, msg);
-	return (new);
+	errno = my_errno;
+	if (my_errno)
+		perror(msg);
+	else
+		ft_putstr_fd(msg, 2);
+	exit(EXIT_FAILURE);
 }
 
+// Manages the dup2 with its error handlings
 
+void	redirect(t_data *data);
+{
+	if (dup2(data->fd_in, STDIN_FILENO) == -1)
+		clean_exit(data, errno, "dup2");
+	if (dup2(data->fd_out, STDOUT_FILENO) == -1)
+		clean_exit(data, errno, "dup2");
+}
