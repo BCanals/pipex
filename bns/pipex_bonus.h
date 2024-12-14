@@ -6,7 +6,7 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 16:18:40 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/14 10:15:31 by bcanals-         ###   ########.fr       */
+/*   Updated: 2024/12/14 14:27:15 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,7 @@ void	handle_err(int my_errno, char *msg);
 void	redirect(t_data *data);
 t_data	*load_data(char *cmd, char **env, int fd_in, int fd_out);
 void	open_files(char *file_in, char *file_out, int *filefds);
+void	close_exit(int *fds, int my_errno, char *msg);
+void	free_close_exit(int *fds1, int *fds2, pid_t *childs, char *msg);
+void	wait_childs(pid_t *childs);
 #endif

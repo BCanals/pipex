@@ -6,7 +6,7 @@
 #    By: bizcru <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/18 17:30:42 by bizcru            #+#    #+#              #
-#    Updated: 2024/12/14 12:40:54 by bcanals-         ###   ########.fr        #
+#    Updated: 2024/12/14 14:54:45 by bcanals-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,8 @@ SRC_DIR = src
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_NAMES))
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(BUILD_DIR)/%.o)
 
-BNS_SRC_NAMES = pipex_bonus.c pipex_utils_bonus.c pipex_utils_2_bonus.c
+BNS_SRC_NAMES = pipex_bonus.c pipex_utils_bonus.c pipex_utils_2_bonus.c \
+				pipex_utils_3_bonus.c
 BNS_SRC_DIR = bns
 BNS_SRC = $(addprefix $(BNS_SRC_DIR)/, $(BNS_SRC_NAMES))
 BNS_OBJ = $(BNS_SRC:$(BNS_SRC_DIR)/%.c=$(BUILD_DIR)/obj_%.o)
