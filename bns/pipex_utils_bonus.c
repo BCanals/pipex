@@ -6,7 +6,7 @@
 /*   By: bcanals- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:48:52 by bcanals-          #+#    #+#             */
-/*   Updated: 2024/12/14 16:48:07 by bcanals-         ###   ########.fr       */
+/*   Updated: 2024/12/14 17:23:39 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,10 @@
 
 void	my_close(int fd1, int fd2, char *msg)
 {
-	char my_msg[200];
-	snprintf(my_msg, sizeof(my_msg), "problem in pid = %d, %s", getpid(), msg);
 	if (close(fd1) == -1)
-		perror(my_msg);
+		perror(msg);
 	if (close(fd2) == -1)
-		perror(my_msg);
+		perror(msg);
 }
 
 // Frees the data of a t_data

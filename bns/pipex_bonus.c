@@ -6,7 +6,7 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 11:15:12 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/14 17:16:27 by bcanals-         ###   ########.fr       */
+/*   Updated: 2024/12/14 17:25:25 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ pid_t	my_fork(char *cmd, char **env, int **fds, pid_t *childs)
 pid_t	*do_childs(int **fds, int argc, char **argv, char **env)
 {
 	int		i;
-	pid_t 	*childs;
+	pid_t	*childs;
 
 	childs = ft_calloc(argc - 2, sizeof(pid_t));
 	if (!childs)
@@ -56,8 +56,8 @@ pid_t	*do_childs(int **fds, int argc, char **argv, char **env)
 		if (childs[i] == -1)
 			free_close_exit(fds[1], fds[0], childs, "fork");
 		my_close(fds[1][0], fds[1][1], "close in main proc after forking");
-		fds[1][0] =  fds[0][0];
-		fds[1][1] =  fds[0][1];
+		fds[1][0] = fds[0][0];
+		fds[1][1] = fds[0][1];
 		i++;
 	}
 	return (childs);
