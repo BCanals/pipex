@@ -6,7 +6,7 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 11:15:12 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/14 14:52:56 by bcanals-         ###   ########.fr       */
+/*   Updated: 2024/12/14 17:16:27 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,13 @@ pid_t	my_fork(char *cmd, char **env, int **fds, pid_t *childs)
 	else if (my_id == 0)
 	{
 		free(childs);
-		my_close(fds[0][1], fds[1][0]);
-		data = load_data(cmd, env, fds[0][0], fds[1][1]);
+		my_close(fds[1][1], fds[0][0], "close in child pre execve");
+		data = load_data(cmd, env, fds[1][0], fds[0][1]);
 		redirect(data);
 		if (execve(data->path, data->args, env) == -1)
 			clean_exit(data, errno, "execve");
-		my_close(data->fd_in, data->fd_out);
+		my_close(data->fd_in, data->fd_out, "close in child afer execve");
+		printf("exit amb exit: %i", getpid());
 		exit(EXIT_SUCCESS);
 	}
 	return (my_id);
@@ -42,25 +43,22 @@ pid_t	*do_childs(int **fds, int argc, char **argv, char **env)
 {
 	int		i;
 	pid_t 	*childs;
-	int		newfds[2];
-	int		oldfds[2];
 
-	fds[0] = newfds;
-	fds[1] = oldfds;
 	childs = ft_calloc(argc - 2, sizeof(pid_t));
 	if (!childs)
-		close_exit(oldfds, errno, "ft_calloc");
+		close_exit(fds[1], errno, "ft_calloc");
 	i = 0;
 	while (i < argc - 4)
 	{
-		if (pipe(newfds) == -1)
-			free_close_exit(oldfds, NULL, childs, "pipe");
+		if (pipe(fds[0]) == -1)
+			free_close_exit(fds[1], NULL, childs, "pipe");
 		childs[i] = my_fork(argv[i + 2], env, fds, childs);
-		if (childs[i++] == -1)
-			free_close_exit(oldfds, newfds, childs, "fork");
-		my_close(oldfds[0], oldfds[1]);
-		oldfds[0] =  newfds[0];
-		oldfds[1] =  newfds[1];
+		if (childs[i] == -1)
+			free_close_exit(fds[1], fds[0], childs, "fork");
+		my_close(fds[1][0], fds[1][1], "close in main proc after forking");
+		fds[1][0] =  fds[0][0];
+		fds[1][1] =  fds[0][1];
+		i++;
 	}
 	return (childs);
 }
@@ -82,8 +80,8 @@ int	main(int argc, char **argv, char **env)
 	childs[argc - 4] = my_fork(argv[argc - 2], env, fds, childs);
 	if (childs[argc - 4] == -1)
 		free_close_exit(oldfds, newfds, childs, "fork");
-	my_close(oldfds[0], oldfds[1]);
-	my_close(newfds[0], newfds[1]);
+	my_close(oldfds[0], oldfds[1], "olds");
+	my_close(newfds[0], newfds[1], "news");
 	wait_childs(childs);
 	free(childs);
 }

@@ -6,7 +6,7 @@
 /*   By: bcanals- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 11:32:22 by bcanals-          #+#    #+#             */
-/*   Updated: 2024/12/14 14:31:35 by bcanals-         ###   ########.fr       */
+/*   Updated: 2024/12/14 17:13:27 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static char	*get_path(char *cmd, char **env, int *my_errno, char **msg_add)
 	if (env[i])
 		paths = ft_split(env[i] + 5, ':');
 	if (!env[i] || !paths)
-		return (set_error(my_errno, "PATH not found\n", msg_add));
+		return (set_error(my_errno, "env PATH not found\n", msg_add));
 	i = -1;
 	while (paths[++i])
 	{
@@ -49,7 +49,7 @@ static char	*get_path(char *cmd, char **env, int *my_errno, char **msg_add)
 		free(this_path);
 	}
 	ft_free_array(paths);
-	return (set_error(my_errno, "no valid path\n", msg_add));
+	return (set_error(my_errno, "command not found", msg_add));
 }
 
 // Loads the necessary data for the child process, also handles errors.
@@ -64,7 +64,7 @@ t_data	*load_data(char *cmd, char **env, int fd_in, int fd_out)
 	if (!new)
 	{
 		perror("malloc");
-		my_close(fd_in, fd_out);
+		my_close(fd_in, fd_out, "close in child after malloc error");
 		exit(EXIT_FAILURE);
 	}
 	new->fd_in = fd_in;
@@ -73,7 +73,7 @@ t_data	*load_data(char *cmd, char **env, int fd_in, int fd_out)
 	new->path = NULL;
 	new->args = ft_split(cmd, ' ');
 	if (!new->args)
-		clean_exit(new, 0, "ft_split in load data");
+		clean_exit(new, 0, "ft_split in load_data");
 	new->path = get_path(new->args[0], env, &my_errno, &msg);
 	if (!new->path)
 		clean_exit(new, my_errno, msg);

@@ -6,7 +6,7 @@
 #    By: bizcru <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/18 17:30:42 by bizcru            #+#    #+#              #
-#    Updated: 2024/12/14 14:54:45 by bcanals-         ###   ########.fr        #
+#    Updated: 2024/12/14 17:18:25 by bcanals-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,7 +83,7 @@ clean:
 fclean: clean
 	@echo -n "$(RED) --> Deleting executables... $(END)"
 	@make -C $(LIBFT_DIR) fclean
-	@rm -rf $(BUILD_DIR)
+	@rm -rf $(NAME) 
 	@echo "$(GREEN) DONE! $(END)"
 
 re: fclean all

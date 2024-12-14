@@ -6,7 +6,7 @@
 /*   By: bcanals- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:48:52 by bcanals-          #+#    #+#             */
-/*   Updated: 2024/12/14 14:32:05 by bcanals-         ###   ########.fr       */
+/*   Updated: 2024/12/14 16:48:07 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 
 // quick line to close 2 fds and print the errors if there are any
 
-void	my_close(int fd1, int fd2)
+void	my_close(int fd1, int fd2, char *msg)
 {
+	char my_msg[200];
+	snprintf(my_msg, sizeof(my_msg), "problem in pid = %d, %s", getpid(), msg);
 	if (close(fd1) == -1)
-		perror("close");
+		perror(my_msg);
 	if (close(fd2) == -1)
-		perror("close");
+		perror(my_msg);
 }
 
 // Frees the data of a t_data
@@ -27,7 +29,7 @@ void	my_close(int fd1, int fd2)
 
 void	clean(t_data *data)
 {
-	my_close(data->fd_in, data->fd_out);
+	my_close(data->fd_in, data->fd_out, "close in child after error");
 	if (data->path)
 		free(data->path);
 	if (data->args)

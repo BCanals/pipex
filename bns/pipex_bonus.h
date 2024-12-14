@@ -6,7 +6,7 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 16:18:40 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/14 14:27:15 by bcanals-         ###   ########.fr       */
+/*   Updated: 2024/12/14 16:43:41 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct s_data
 	int		fd_out;
 }			t_data;
 
-void	my_close(int fd1, int fd2);
+void	my_close(int fd1, int fd2, char *msg);
 void	clean(t_data *data);
 void	clean_exit(t_data *data, int my_errno, char *msg);
 void	handle_err(int my_errno, char *msg);
