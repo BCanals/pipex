@@ -6,11 +6,11 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 11:15:12 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/13 18:02:07 by bcanals-         ###   ########.fr       */
+/*   Updated: 2024/12/14 10:15:05 by bcanals-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 pid_t	my_fork(char *cmd, char **env, int *fds_in, int *fds_out)
 {
