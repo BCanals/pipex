@@ -6,7 +6,7 @@
 /*   By: bcanals- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 11:32:22 by bcanals-          #+#    #+#             */
-/*   Updated: 2024/12/13 18:52:25 by bcanals-         ###   ########.fr       */
+/*   Updated: 2025/12/04 20:48:11 by becanals         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static char	*set_error(int *my_errno, char *msg, char **msg_add)
 // Gets the path (if valid one) of the cmd of the child.
 // Manages errors to allow load_data print the correct error info.
 
-static char	*get_path(char *cmd, char **env, int *my_errno, char **msg_add)
+static char	*get_rel_path(char *cmd, char **env, int *my_errno, char **msg_add)
 {
 	int		i;
 	char	**paths;
@@ -49,7 +49,19 @@ static char	*get_path(char *cmd, char **env, int *my_errno, char **msg_add)
 		free(this_path);
 	}
 	ft_free_array(paths);
-	return (set_error(my_errno, "no valid path\n", msg_add));
+	return (set_error(my_errno, "no valid path", msg_add));
+}
+
+// Checks if the path is absolute and if it exists.
+// Returns the path via get_rel_path otherwise.
+
+static char *get_path(char *cmd, char **env, int *my_errno, char **msg_add)
+{
+	if (!ft_strchr(cmd, '/'))
+		return (get_rel_path(cmd, env, my_errno, msg_add));
+	if (access(cmd, X_OK))
+		return (set_error(my_errno, "pipex", msg_add));
+	return (cmd);
 }
 
 // Loads the necessary data for the child process, also handles errors.

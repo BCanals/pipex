@@ -6,7 +6,7 @@
 /*   By: bcanals- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:48:52 by bcanals-          #+#    #+#             */
-/*   Updated: 2024/12/13 18:04:16 by bcanals-         ###   ########.fr       */
+/*   Updated: 2025/12/04 20:38:45 by becanals         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	my_close(int fd1, int fd2)
 void	clean(t_data *data)
 {
 	my_close(data->fd_in, data->fd_out);
+	if (data->path == data->args[0])
+		data->path = 0;
 	if (data->path)
 		free(data->path);
 	if (data->args)

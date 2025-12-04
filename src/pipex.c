@@ -6,7 +6,7 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 11:15:12 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/13 18:02:07 by bcanals-         ###   ########.fr       */
+/*   Updated: 2025/12/04 21:14:09 by becanals         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,20 @@ int	main(int argc, char **argv, char **env)
 {
 	int		pipefds[2];
 	int		filefds[2];
-	pid_t	pid_1;
-	pid_t	pid_2;
+	pid_t	pid[2];
+	int		err_num;
 
 	if (argc != 5)
 		handle_err(0, "Please write 4 arguments");
 	if (pipe(pipefds) == -1)
 		handle_err(errno, "pipe error");
 	open_files(argv[1], argv[4], filefds);
-	pid_1 = my_fork(argv[2], env, filefds, pipefds);
-	pid_2 = my_fork(argv[3], env, pipefds, filefds);
+	pid[0] = my_fork(argv[2], env, filefds, pipefds);
+	pid[1] = my_fork(argv[3], env, pipefds, filefds);
 	my_close(filefds[0], filefds[1]);
 	my_close(pipefds[0], pipefds[1]);
-	waitpid(pid_1, NULL, 0);
-	waitpid(pid_2, NULL, 0);
+	waitpid(pid[0], NULL, 0);
+	waitpid(pid[1], &err_num, 0);
+	printf("%i\n", err_num);
+	exit(err_num);
 }

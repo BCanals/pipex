@@ -6,7 +6,7 @@
 #    By: bizcru <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/18 17:30:42 by bizcru            #+#    #+#              #
-#    Updated: 2024/12/14 17:18:25 by bcanals-         ###   ########.fr        #
+#    Updated: 2025/12/04 20:48:34 by becanals         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,27 +48,27 @@ all: $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT)
 	@echo -n "\n$(YELLOW)--->BUILDING $(NAME)...$(END)\n"
-	@$(CC) $(CFLAGS) $(OBJ) $(LIB_FLAGS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) $(LIB_FLAGS) -o $(NAME)
 	@echo "$(GREEN)   === BUILDING COMPLETE : ) ===$(END)\n"
 
 bonus: $(BNS_OBJ) $(LIBFT) 
 	@echo -n "\n$(YELLOW)--->BUILDING $(NAME)...$(END)"	
-	@$(CC) $(CFLAGS) $(BNS_OBJ) $(LIB_FLAGS) -o $(BNS_NAME)
+	$(CC) $(CFLAGS) $(BNS_OBJ) $(LIB_FLAGS) -o $(BNS_NAME)
 	@echo "$(GREEN)   === BUILDING COMPLETE : ) ===$(END)\n"
 
 $(LIBFT): 
 	@echo "\n $(YELLOW) ---> Compiling libft... === $(END)"
-	@make -C $(LIBFT_DIR)
+	make -C $(LIBFT_DIR)
 	@echo "$(GREEN)   === libft.a is compiled :) ===$(END)"
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(HDER) Makefile | $(BUILD_DIR)
 	@$(CC) $(CFLAGS) -I. -c $< -o $@
-	@echo -n "\n $(BLUE) ---> Building $<... --- $(END)"
+	echo -n "\n $(BLUE) ---> Building $<... --- $(END)"
 	@echo " $(CIAN) DONE! :) $(END)"
 
 $(BUILD_DIR)/obj_%.o: $(BNS_SRC_DIR)/%.c $(BNS_HDER) Makefile | $(BUILD_DIR)
-	@$(CC) $(CFLAGS) -I. -c $< -o $@
 	@echo -n "\n $(BLUE) ---> Building $<... --- $(END)"
+	$(CC) $(CFLAGS) -I. -c $< -o $@
 	@echo " $(CIAN) DONE! :) $(END)"
 
 $(BUILD_DIR):
