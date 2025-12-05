@@ -6,7 +6,7 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 16:18:40 by bizcru            #+#    #+#             */
-/*   Updated: 2024/12/14 10:13:49 by bcanals-         ###   ########.fr       */
+/*   Updated: 2025/12/05 19:29:22 by becanals         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ typedef struct s_data
 
 void	my_close(int fd1, int fd2);
 void	clean(t_data *data);
-void	clean_exit(t_data *data, int my_errno, char *msg);
-void	handle_err(int my_errno, char *msg);
+void	clean_exit(t_data *data, int my_errno, char *msg, int status);
+void	handle_err(int my_errno, char *msg, int status);
 void	redirect(t_data *data);
 t_data	*load_data(char *cmd, char **env, int fd_in, int fd_out);
 void	open_files(char *file_in, char *file_out, int *filefds);

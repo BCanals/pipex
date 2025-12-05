@@ -6,7 +6,7 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 11:15:12 by bizcru            #+#    #+#             */
-/*   Updated: 2025/12/04 21:14:09 by becanals         ###   ########.fr       */
+/*   Updated: 2025/12/05 21:03:13 by becanals         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,17 @@ pid_t	my_fork(char *cmd, char **env, int *fds_in, int *fds_out)
 
 	my_id = fork();
 	if (my_id == -1)
-		handle_err(errno, "fork");
+		handle_err(errno, "fork", EXIT_FAILURE);
 	else if (my_id == 0)
 	{
 		my_close(fds_in[1], fds_out[0]);
 		data = load_data(cmd, env, fds_in[0], fds_out[1]);
 		redirect(data);
-		if (execve(data->path, data->args, env) == -1)
-			clean_exit(data, errno, "execve");
+		if (data->fd_out != -1 && execve(data->path, data->args, env) == -1)
+			clean_exit(data, errno, "execve", EXIT_FAILURE);
 		my_close(data->fd_in, data->fd_out);
+		if (data->fd_out == -1)
+			exit(EXIT_FAILURE);
 		exit(EXIT_SUCCESS);
 	}
 	return (my_id);
@@ -41,9 +43,9 @@ int	main(int argc, char **argv, char **env)
 	int		err_num;
 
 	if (argc != 5)
-		handle_err(0, "Please write 4 arguments");
+		handle_err(0, "Please write 4 arguments", EXIT_FAILURE);
 	if (pipe(pipefds) == -1)
-		handle_err(errno, "pipe error");
+		handle_err(errno, "pipe error", EXIT_FAILURE);
 	open_files(argv[1], argv[4], filefds);
 	pid[0] = my_fork(argv[2], env, filefds, pipefds);
 	pid[1] = my_fork(argv[3], env, pipefds, filefds);
@@ -51,6 +53,5 @@ int	main(int argc, char **argv, char **env)
 	my_close(pipefds[0], pipefds[1]);
 	waitpid(pid[0], NULL, 0);
 	waitpid(pid[1], &err_num, 0);
-	printf("%i\n", err_num);
-	exit(err_num);
+	exit(err_num >> 8);
 }

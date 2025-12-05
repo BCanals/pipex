@@ -6,7 +6,7 @@
 /*   By: bcanals- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 11:32:22 by bcanals-          #+#    #+#             */
-/*   Updated: 2025/12/04 20:48:11 by becanals         ###   ########.fr       */
+/*   Updated: 2025/12/05 21:04:46 by becanals         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static char	*get_rel_path(char *cmd, char **env, int *my_errno, char **msg_add)
 // Checks if the path is absolute and if it exists.
 // Returns the path via get_rel_path otherwise.
 
-static char *get_path(char *cmd, char **env, int *my_errno, char **msg_add)
+static char	*get_path(char *cmd, char **env, int *my_errno, char **msg_add)
 {
 	if (!ft_strchr(cmd, '/'))
 		return (get_rel_path(cmd, env, my_errno, msg_add));
@@ -77,7 +77,7 @@ t_data	*load_data(char *cmd, char **env, int fd_in, int fd_out)
 	{
 		perror("malloc");
 		my_close(fd_in, fd_out);
-		exit(EXIT_FAILURE);
+		exit(127);
 	}
 	new->fd_in = fd_in;
 	new->fd_out = fd_out;
@@ -85,10 +85,10 @@ t_data	*load_data(char *cmd, char **env, int fd_in, int fd_out)
 	new->path = NULL;
 	new->args = ft_split(cmd, ' ');
 	if (!new->args)
-		clean_exit(new, 0, "ft_split in load data");
+		clean_exit(new, 0, "ft_split in load data", EXIT_FAILURE);
 	new->path = get_path(new->args[0], env, &my_errno, &msg);
 	if (!new->path)
-		clean_exit(new, my_errno, msg);
+		clean_exit(new, my_errno, msg, 127);
 	return (new);
 }
 
@@ -100,15 +100,10 @@ void	open_files(char *file_in, char *file_out, int *filefds)
 
 	temp_fd = open(file_in, O_RDONLY);
 	if (temp_fd == -1)
-		handle_err(errno, "open infile");
-	filefds[0] = temp_fd;
-	temp_fd = open(file_out, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+		perror(file_in);
+	filefds[0] = 0;
+	temp_fd = open(file_out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (temp_fd == -1)
-	{
-		perror("open outfile");
-		if (close(filefds[1]) == -1)
-			perror("close infile");
-		exit(EXIT_FAILURE);
-	}
+		perror(file_out);
 	filefds[1] = temp_fd;
 }

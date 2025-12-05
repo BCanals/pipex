@@ -6,7 +6,7 @@
 /*   By: bcanals- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:48:52 by bcanals-          #+#    #+#             */
-/*   Updated: 2025/12/04 20:38:45 by becanals         ###   ########.fr       */
+/*   Updated: 2025/12/05 20:53:14 by becanals         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 
 void	my_close(int fd1, int fd2)
 {
-	if (close(fd1) == -1)
+	if (fd1 != -1 && close(fd1) == -1)
 		perror("close");
-	if (close(fd2) == -1)
+	if (fd2 != -1 && close(fd2) == -1)
 		perror("close");
 }
 
@@ -39,30 +39,30 @@ void	clean(t_data *data)
 
 // Frees the data in t_data and exits the code via handl_err
 
-void	clean_exit(t_data *data, int my_errno, char *msg)
+void	clean_exit(t_data *data, int my_errno, char *msg, int status)
 {
 	clean(data);
-	handle_err(my_errno, msg);
+	handle_err(my_errno, msg, status);
 }
 
 // Exits the process previously printing the error msg
 
-void	handle_err(int my_errno, char *msg)
+void	handle_err(int my_errno, char *msg, int status)
 {
 	errno = my_errno;
 	if (my_errno)
 		perror(msg);
 	else
 		ft_putstr_fd(msg, 2);
-	exit(EXIT_FAILURE);
+	exit(status);
 }
 
 // Manages the dup2 with its error handlings
 
 void	redirect(t_data *data)
 {
-	if (dup2(data->fd_in, STDIN_FILENO) == -1)
-		clean_exit(data, errno, "dup2");
-	if (dup2(data->fd_out, STDOUT_FILENO) == -1)
-		clean_exit(data, errno, "dup2");
+	if (data->fd_in != -1 && dup2(data->fd_in, STDIN_FILENO) == -1)
+		clean_exit(data, errno, "dup2", EXIT_FAILURE);
+	if (data->fd_out != -1 && dup2(data->fd_out, STDOUT_FILENO) == -1)
+		clean_exit(data, errno, "dup2", EXIT_FAILURE);
 }
