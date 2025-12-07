@@ -6,7 +6,7 @@
 /*   By: bcanals- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 11:32:22 by bcanals-          #+#    #+#             */
-/*   Updated: 2025/12/05 21:04:46 by becanals         ###   ########.fr       */
+/*   Updated: 2025/12/07 12:11:05 by becanals         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static char	*get_rel_path(char *cmd, char **env, int *my_errno, char **msg_add)
 	if (env[i])
 		paths = ft_split(env[i] + 5, ':');
 	if (!env[i] || !paths)
-		return (set_error(my_errno, "PATH not found\n", msg_add));
+		return (set_error(my_errno, "command not found\n", msg_add));
 	i = -1;
 	while (paths[++i])
 	{
@@ -49,7 +49,7 @@ static char	*get_rel_path(char *cmd, char **env, int *my_errno, char **msg_add)
 		free(this_path);
 	}
 	ft_free_array(paths);
-	return (set_error(my_errno, "no valid path", msg_add));
+	return (set_error(my_errno, "command not found", msg_add));
 }
 
 // Checks if the path is absolute and if it exists.
@@ -60,7 +60,7 @@ static char	*get_path(char *cmd, char **env, int *my_errno, char **msg_add)
 	if (!ft_strchr(cmd, '/'))
 		return (get_rel_path(cmd, env, my_errno, msg_add));
 	if (access(cmd, X_OK))
-		return (set_error(my_errno, "pipex", msg_add));
+		return (set_error(my_errno, "path", msg_add));
 	return (cmd);
 }
 
@@ -86,8 +86,9 @@ t_data	*load_data(char *cmd, char **env, int fd_in, int fd_out)
 	new->args = ft_split(cmd, ' ');
 	if (!new->args)
 		clean_exit(new, 0, "ft_split in load data", EXIT_FAILURE);
-	new->path = get_path(new->args[0], env, &my_errno, &msg);
-	if (!new->path)
+	if (fd_out != -1)
+		new->path = get_path(new->args[0], env, &my_errno, &msg);
+	if (fd_out != -1 && !new->path)
 		clean_exit(new, my_errno, msg, 127);
 	return (new);
 }
@@ -101,7 +102,7 @@ void	open_files(char *file_in, char *file_out, int *filefds)
 	temp_fd = open(file_in, O_RDONLY);
 	if (temp_fd == -1)
 		perror(file_in);
-	filefds[0] = 0;
+	filefds[0] = temp_fd;
 	temp_fd = open(file_out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (temp_fd == -1)
 		perror(file_out);

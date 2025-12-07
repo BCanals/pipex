@@ -6,7 +6,7 @@
 /*   By: bizcru <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 11:15:12 by bizcru            #+#    #+#             */
-/*   Updated: 2025/12/05 21:03:13 by becanals         ###   ########.fr       */
+/*   Updated: 2025/12/07 12:11:13 by becanals         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,11 @@ pid_t	my_fork(char *cmd, char **env, int *fds_in, int *fds_out)
 		my_close(fds_in[1], fds_out[0]);
 		data = load_data(cmd, env, fds_in[0], fds_out[1]);
 		redirect(data);
-		if (data->fd_out != -1 && execve(data->path, data->args, env) == -1)
+		if (data->fd_out != -1 && data->fd_in != -1
+			&& execve(data->path, data->args, env) == -1)
 			clean_exit(data, errno, "execve", EXIT_FAILURE);
 		my_close(data->fd_in, data->fd_out);
-		if (data->fd_out == -1)
+		if (data->fd_out == -1 || data->fd_in == -1)
 			exit(EXIT_FAILURE);
 		exit(EXIT_SUCCESS);
 	}

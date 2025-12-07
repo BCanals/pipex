@@ -6,7 +6,7 @@
 #    By: bizcru <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/18 17:30:42 by bizcru            #+#    #+#              #
-#    Updated: 2025/12/05 21:12:53 by becanals         ###   ########.fr        #
+#    Updated: 2025/12/07 11:00:12 by becanals         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,8 +62,8 @@ $(LIBFT):
 	@echo "$(GREEN)   === libft.a is compiled :) ===$(END)"
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(HDER) Makefile | $(BUILD_DIR)
-	$(CC) $(CFLAGS) -I. -c $< -o $@
 	@echo -n "\n $(BLUE) ---> Building $<... --- $(END)"
+	$(CC) $(CFLAGS) -I. -c $< -o $@
 	@echo " $(CIAN) DONE! :) $(END)"
 
 $(BUILD_DIR)/obj_%.o: $(BNS_SRC_DIR)/%.c $(BNS_HDER) Makefile | $(BUILD_DIR)
